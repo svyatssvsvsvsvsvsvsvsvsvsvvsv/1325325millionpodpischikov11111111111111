@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Миллион подписчиков</title>
+  <meta name="theme-color" content="#070b16" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    :root {
+      --bg: #070b16;
+      --panel: rgba(255,255,255,.06);
+      --panel-2: rgba(255,255,255,.08);
+      --line: rgba(255,255,255,.10);
+      --text: #ffffff;
+      --muted: rgba(255,255,255,.72);
+      --muted-2: rgba(255,255,255,.45);
+      --green: #4ff0a2;
+      --gold: #f6c86e;
+      --shadow: 0 24px 80px rgba(0,0,0,.35);
+      --radius: 28px;
+      --safe-bottom: calc(env(safe-area-inset-bottom) + 14px);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(164,84,255,.25), transparent 30%),
+        radial-gradient(circle at bottom, rgba(59,130,246,.18), transparent 34%),
+        var(--bg);
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 12px 12px calc(104px + var(--safe-bottom));
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+    }
+
+    .topbar {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .headline {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.02;
+      letter-spacing: -.04em;
+      font-weight: 900;
+    }
+
+    .sub {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .top-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mini {
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      padding: 12px;
+    }
+
+    .mini-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--muted-2);
+      margin-bottom: 6px;
+    }
+
+    .mini-value {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+    }
+
+    .platforms {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .platform {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,.05);
+      padding: 10px 8px;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      min-height: 112px;
+    }
+
+    .platform.active {
+      border-color: rgba(255,255,255,.24);
+      background: rgba(255,255,255,.11);
+      transform: translateY(-1px);
+    }
+
+    .platform-count {
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: -.03em;
+      color: #fff;
+    }
+
+    .platform-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+      font-size: 23px;
+      color: #fff;
+      box-shadow: 0 18px 42px rgba(0,0,0,.25);
+    }
+
+    .platform-name {
+      margin-top: 8px;
+      font-size: 12px;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .telegram { background: linear-gradient(135deg, #2aa8ff, #54d3ff); }
+    .tiktok { background: linear-gradient(135deg, #ec4899, #b517ff); }
+    .instagram { background: linear-gradient(135deg, #f59e0b, #ec4899 55%, #8b5cf6); }
+    .youtube { background: linear-gradient(135deg, #ff3838, #ff6b6b); }
+
+    .layout {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 16px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--accent-soft);
+      opacity: .12;
+      pointer-events: none;
+    }
+
+    .hero-top {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .hero-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+      background: var(--accent);
+      box-shadow: 0 18px 42px rgba(0,0,0,.24);
+      white-space: nowrap;
+    }
+
+    .hero-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 26px;
+      background: var(--accent);
+      box-shadow: 0 18px 42px rgba(0,0,0,.24);
+      flex: 0 0 auto;
+    }
+
+    .hero-name {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -.05em;
+    }
+
+    .hero-main {
+      position: relative;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      padding: 18px 14px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-count {
+      position: relative;
+      z-index: 2;
+      font-size: 54px;
+      font-weight: 900;
+      line-height: .95;
+      letter-spacing: -.08em;
+      transition: transform .16s ease;
+      text-wrap: balance;
+      word-break: break-word;
+    }
+
+    .hero-count.bump { transform: scale(1.025); }
+
+    .hero-fund {
+      position: relative;
+      z-index: 2;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .hero-fund strong { color: var(--green); }
+
+    .floaters {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .floater {
+      position: absolute;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--green);
+      background: rgba(79,240,162,.16);
+      border: 1px solid rgba(79,240,162,.16);
+      backdrop-filter: blur(10px);
+      animation: rise 1.15s ease-out forwards;
+    }
+
+    @keyframes rise {
+      0% { opacity: 0; transform: translate(-50%, 18px) scale(.66); }
+      15% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -110px) scale(1.06); }
+    }
+
+    .progress-wrap {
+      margin-top: 12px;
+      border-radius: 26px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      padding: 12px;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .progress-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--muted-2);
+    }
+
+    .progress-left {
+      margin-top: 4px;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+    }
+
+    .progress-percent {
+      font-size: 15px;
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .bar {
+      width: 100%;
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 10px 30px rgba(0,0,0,.2) inset;
+      transition: width .18s ease;
+    }
+
+    .hero-meta {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .meta-box {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(0,0,0,.22);
+      padding: 12px;
+    }
+
+    .meta-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--muted-2);
+    }
+
+    .meta-value {
+      margin-top: 6px;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+    }
+
+    .prizes {
+      padding: 14px;
+    }
+
+    .prize-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .prize-total {
+      font-size: 36px;
+      line-height: .95;
+      font-weight: 900;
+      letter-spacing: -.06em;
+      margin-bottom: 12px;
+    }
+
+    .prize-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .prize-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      padding: 12px 14px;
+      font-size: 14px;
+    }
+
+    .prize-item strong {
+      color: var(--gold);
+      font-size: 15px;
+    }
+
+    .done {
+      display: none;
+      margin-top: 12px;
+      border-radius: 26px;
+      border: 1px solid rgba(246,200,110,.34);
+      background: rgba(246,200,110,.10);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .done.show { display: block; }
+
+    .done-title {
+      font-size: 29px;
+      font-weight: 900;
+      letter-spacing: -.05em;
+    }
+
+    .done-text {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .bottom-action {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 10px 12px var(--safe-bottom);
+      background: rgba(7,11,22,.84);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(24px);
+      z-index: 40;
+    }
+
+    .bottom-inner {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .tap {
+      width: 100%;
+      border: 0;
+      border-radius: 24px;
+      min-height: 66px;
+      padding: 16px 18px;
+      background: #fff;
+      color: #0b1020;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -.03em;
+      cursor: pointer;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      transition: transform .08s ease, opacity .18s ease;
+    }
+
+    .tap:active { transform: scale(.985); }
+    .tap[disabled] { opacity: .35; cursor: default; }
+
+    .desktop-only { display: none; }
+
+    @media (min-width: 920px) {
+      .app { padding: 20px 20px 130px; }
+      .title { font-size: 44px; }
+      .sub { font-size: 14px; }
+      .layout { grid-template-columns: 1.25fr .82fr; gap: 18px; margin-top: 18px; }
+      .hero { padding: 20px; }
+      .hero-name { font-size: 38px; }
+      .hero-main { padding: 30px 22px; }
+      .hero-count { font-size: 104px; }
+      .topbar { padding: 18px; }
+      .top-stats { gap: 14px; }
+      .platforms { gap: 14px; margin-top: 16px; }
+      .platform { min-height: 142px; padding: 14px 10px; }
+      .platform-count { font-size: 16px; }
+      .platform-icon { width: 68px; height: 68px; font-size: 29px; border-radius: 22px; }
+      .platform-name { font-size: 14px; }
+      .prizes { padding: 18px; }
+      .bottom-inner { max-width: 640px; }
+      .tap { min-height: 72px; font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="card topbar">
+      <div class="headline">
+        <div>
+          <h1 class="title">Миллион подписчиков</h1>
+          <div class="sub">1 подписчик = 1 ₽</div>
+        </div>
+      </div>
+      <div class="top-stats">
+        <div class="mini">
+          <div class="mini-label">Всего подписчиков</div>
+          <div class="mini-value" id="totalFollowers">0</div>
+        </div>
+        <div class="mini">
+          <div class="mini-label">Общий фонд</div>
+          <div class="mini-value" id="totalFund">0 ₽</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="platforms" id="platforms"></section>
+
+    <section class="layout">
+      <section class="card hero">
+        <div class="hero-top">
+          <div class="hero-left">
+            <div class="hero-icon" id="heroIcon"></div>
+            <div>
+              <div class="hero-name" id="heroName"></div>
+            </div>
+          </div>
+          <div class="hero-badge" id="heroStatus"></div>
+        </div>
+
+        <div class="hero-main">
+          <div class="floaters" id="floaters"></div>
+          <div class="hero-count" id="heroCount">0</div>
+          <div class="hero-fund">Фонд: <strong id="heroFund">0 ₽</strong></div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-head">
+            <div>
+              <div class="progress-label">До миллиона</div>
+              <div class="progress-left" id="leftToGoal">0</div>
+            </div>
+            <div class="progress-percent" id="progressPercent">0%</div>
+          </div>
+          <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+        </div>
+
+        <div class="hero-meta">
+          <div class="meta-box">
+            <div class="meta-label">Подписчиков</div>
+            <div class="meta-value" id="metaFollowers">0</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">Фонд</div>
+            <div class="meta-value" id="metaFund">0 ₽</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">Статус</div>
+            <div class="meta-value" id="metaStatus">Старт</div>
+          </div>
+        </div>
+
+        <div class="done" id="doneBox">
+          <div class="done-title">Миллион!</div>
+          <div class="done-text" id="doneText"></div>
+        </div>
+      </section>
+
+      <aside class="card prizes">
+        <div class="prize-head"><i class="fa-solid fa-trophy"></i> Призы</div>
+        <div class="prize-total" id="prizeTotal">1 000 000 ₽</div>
+        <div class="prize-list" id="prizeList"></div>
+      </aside>
+    </section>
+  </div>
+
+  <div class="bottom-action">
+    <div class="bottom-inner">
+      <button class="tap" id="tapButton">+1 подписчик • +1 ₽</button>
+    </div>
+  </div>
+
+  <script>
+    const GOAL = 1000000;
+    const STORAGE_KEY = 'million-tracker-static-v1';
+    const PRIZES = [
+      { place: 1, amount: 250000 },
+      { place: 2, amount: 200000 },
+      { place: 3, amount: 150000 },
+      { place: 4, amount: 100000 },
+      { place: 5, amount: 50000 },
+      { place: 6, amount: 50000 },
+      { place: 7, amount: 50000 },
+      { place: 8, amount: 50000 },
+      { place: 9, amount: 50000 },
+      { place: 10, amount: 50000 },
+    ];
+
+    const ICONS = {
+      telegram: '<i class="fa-brands fa-telegram"></i>',
+      tiktok: '<i class="fa-brands fa-tiktok"></i>',
+      instagram: '<i class="fa-brands fa-instagram"></i>',
+      youtube: '<i class="fa-brands fa-youtube"></i>'
+    };
+
+    const PLATFORMS = [
+      { id: 'telegram', name: 'Telegram', followers: 568 },
+      { id: 'tiktok', name: 'TikTok', followers: 568 },
+      { id: 'instagram', name: 'Instagram', followers: 568 },
+      { id: 'youtube', name: 'YouTube', followers: 568 }
+    ];
+
+    const state = loadState();
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        if (Array.isArray(saved.platforms) && saved.platforms.length === 4) {
+          return {
+            platforms: saved.platforms.map((p, i) => ({
+              ...PLATFORMS[i],
+              followers: Number.isFinite(p.followers) ? Math.max(0, Math.min(GOAL, p.followers)) : PLATFORMS[i].followers
+            })),
+            activeId: saved.activeId || 'tiktok'
+          };
+        }
+      } catch (e) {}
+      return {
+        platforms: JSON.parse(JSON.stringify(PLATFORMS)),
+        activeId: 'tiktok'
+      };
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function formatNumber(value) {
+      return new Intl.NumberFormat('ru-RU').format(value);
+    }
+
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('ru-RU', {
+        style: 'currency',
+        currency: 'RUB',
+        maximumFractionDigits: 0
+      }).format(value);
+    }
+
+    function prizePool() {
+      return PRIZES.reduce((sum, item) => sum + item.amount, 0);
+    }
+
+    function statusLabel(value) {
+      if (value >= GOAL) return 'Миллион';
+      if (value >= 500000) return 'Финал';
+      if (value >= 100000) return 'Рост';
+      if (value >= 10000) return 'Разгон';
+      return 'Старт';
+    }
+
+    function activePlatform() {
+      return state.platforms.find(p => p.id === state.activeId) || state.platforms[1];
+    }
+
+    function renderPlatforms() {
+      const wrap = document.getElementById('platforms');
+      wrap.innerHTML = '';
+      state.platforms.forEach(platform => {
+        const el = document.createElement('button');
+        el.className = 'platform' + (platform.id === state.activeId ? ' active' : '');
+        el.innerHTML = `
+          <div class="platform-count">${formatNumber(platform.followers)}</div>
+          <div class="platform-icon ${platform.id}">${ICONS[platform.id]}</div>
+          <div class="platform-name">${platform.name}</div>
+        `;
+        el.addEventListener('click', () => {
+          state.activeId = platform.id;
+          saveState();
+          render();
+        });
+        wrap.appendChild(el);
+      });
+    }
+
+    function renderPrizeList() {
+      const wrap = document.getElementById('prizeList');
+      wrap.innerHTML = '';
+      PRIZES.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'prize-item';
+        row.innerHTML = `<span>${item.place} место</span><strong>${formatCurrency(item.amount)}</strong>`;
+        wrap.appendChild(row);
+      });
+      document.getElementById('prizeTotal').textContent = formatCurrency(prizePool());
+    }
+
+    function renderHero() {
+      const current = activePlatform();
+      const totalFollowers = state.platforms.reduce((sum, item) => sum + item.followers, 0);
+      const totalFund = state.platforms.reduce((sum, item) => sum + Math.min(item.followers, GOAL), 0);
+      const fund = Math.min(current.followers, prizePool());
+      const left = Math.max(0, GOAL - current.followers);
+      const percent = Math.min(100, (current.followers / GOAL) * 100);
+      const done = current.followers >= GOAL;
+
+      document.getElementById('totalFollowers').textContent = formatNumber(totalFollowers);
+      document.getElementById('totalFund').textContent = formatCurrency(totalFund);
+      document.getElementById('heroIcon').className = 'hero-icon ' + current.id;
+      document.getElementById('heroIcon').innerHTML = ICONS[current.id];
+      document.getElementById('heroName').textContent = current.name;
+      document.getElementById('heroStatus').textContent = statusLabel(current.followers);
+      document.getElementById('heroStatus').style.background = getComputedStyle(document.documentElement).getPropertyValue('--accent') || '';
+      document.getElementById('heroCount').textContent = formatNumber(current.followers);
+      document.getElementById('heroFund').textContent = formatCurrency(fund);
+      document.getElementById('leftToGoal').textContent = formatNumber(left);
+      document.getElementById('progressPercent').textContent = percent.toFixed(2) + '%';
+      document.getElementById('barFill').style.width = percent + '%';
+      document.getElementById('metaFollowers').textContent = formatNumber(current.followers);
+      document.getElementById('metaFund').textContent = formatCurrency(fund);
+      document.getElementById('metaStatus').textContent = statusLabel(current.followers);
+
+      const doneBox = document.getElementById('doneBox');
+      const doneText = document.getElementById('doneText');
+      if (done) {
+        doneBox.classList.add('show');
+        doneText.textContent = 'Фонд ' + formatCurrency(prizePool()) + ' готов. Розыгрыш среди подписчиков ' + current.name + '.';
+      } else {
+        doneBox.classList.remove('show');
+      }
+
+      const button = document.getElementById('tapButton');
+      button.disabled = done;
+      button.textContent = done ? 'Миллион достигнут' : '+1 подписчик • +1 ₽';
+
+      applyAccent(current.id);
+    }
+
+    function applyAccent(id) {
+      const root = document.documentElement.style;
+      if (id === 'telegram') {
+        root.setProperty('--accent', 'linear-gradient(135deg, #2aa8ff, #54d3ff)');
+        root.setProperty('--accent-soft', 'linear-gradient(135deg, #2aa8ff, #54d3ff)');
+      } else if (id === 'tiktok') {
+        root.setProperty('--accent', 'linear-gradient(135deg, #ec4899, #b517ff)');
+        root.setProperty('--accent-soft', 'linear-gradient(135deg, #ec4899, #b517ff)');
+      } else if (id === 'instagram') {
+        root.setProperty('--accent', 'linear-gradient(135deg, #f59e0b, #ec4899 55%, #8b5cf6)');
+        root.setProperty('--accent-soft', 'linear-gradient(135deg, #f59e0b, #ec4899 55%, #8b5cf6)');
+      } else {
+        root.setProperty('--accent', 'linear-gradient(135deg, #ff3838, #ff6b6b)');
+        root.setProperty('--accent-soft', 'linear-gradient(135deg, #ff3838, #ff6b6b)');
+      }
+    }
+
+    function spawnFloater() {
+      const wrap = document.getElementById('floaters');
+      const points = [
+        { x: 50, y: 58 },
+        { x: 36, y: 64 },
+        { x: 64, y: 64 }
+      ];
+
+      points.forEach((point, index) => {
+        const el = document.createElement('div');
+        el.className = 'floater';
+        el.textContent = '+1 ₽';
+        el.style.left = (point.x + (Math.random() * 6 - 3)) + '%';
+        el.style.top = (point.y + (Math.random() * 4 - 2)) + '%';
+        el.style.animationDelay = (index * 30) + 'ms';
+        wrap.appendChild(el);
+        setTimeout(() => el.remove(), 1160);
+      });
+    }
+
+    function bumpCount() {
+      const el = document.getElementById('heroCount');
+      el.classList.remove('bump');
+      void el.offsetWidth;
+      el.classList.add('bump');
+      setTimeout(() => el.classList.remove('bump'), 180);
+    }
+
+    function addFollower() {
+      const current = activePlatform();
+      if (current.followers >= GOAL) return;
+      current.followers = Math.min(GOAL, current.followers + 1);
+      saveState();
+      spawnFloater();
+      render();
+      bumpCount();
+    }
+
+    function render() {
+      renderPlatforms();
+      renderHero();
+      renderPrizeList();
+    }
+
+    document.getElementById('tapButton').addEventListener('click', addFollower);
+    render();
+  </script>
+</body>
+</html>
